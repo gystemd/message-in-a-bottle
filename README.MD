@@ -1,6 +1,7 @@
 
 
 # Message in a bottle
+[![Build Status](https://app.travis-ci.com/fcarli3/message-in-a-bottle.svg?token=3N4JdWYn7QpiZ6F6wFdB&branch=main)](https://app.travis-ci.com/fcarli3/message-in-a-bottle)
 
 ## Installation
 
