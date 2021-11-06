@@ -1,23 +1,28 @@
 <html>
-  <head>
-    <title>Register</title>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <style>
-      body{
-            background-image: url(https://i.postimg.cc/YSgCg909/mare2.jpg);
-            background-size: cover;
-          }
-    </style>
-  </head>
- <body>
+<head>
+  <title>Register</title>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <style>
+    body {
+      background-image: url(https://i.postimg.cc/YSgCg909/mare2.jpg);
+      background-size: cover;
+    }
+  </style>
+</head>
+
+<body>
   <nav class="navbar navbar-expand-lg navbar-light" style="background-color:#FFFFFF;">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#"><img src="https://i.postimg.cc/02vWGMHK/logo.jpg" width="30" height="30" alt=""></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <a class="navbar-brand" href="#"><img src="https://i.postimg.cc/02vWGMHK/logo.jpg" width="30" height="30"
+          alt=""></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -44,39 +49,44 @@
       </div>
     </div>
   </nav>
-    {% if emailError %}
-      <div class="alert alert-danger alert-dismissible fade show pt-3" role="alert">
-        Email already in use, select a new one
-        <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close" style="float: right;"></button>
-      </div>
-    {% endif %}
-    <div class="container" id="log" style="margin-top: 8%;">
-      <div class="row">
-        <div class="col text-center">
-          <form action="" method="POST">
-            {{ form.hidden_tag() }}
-            <dl>
+  {% if emailError %}
+  <div class="alert alert-danger alert-dismissible fade show pt-3" role="alert">
+    Email already in use, select a new one!
+    <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close" style="float: right;"></button>
+  </div>
+  {% endif %}
+  {% if is_reported %}
+  <div class="alert alert-danger alert-dismissible fade show pt-3" role="alert">
+    You have been suspended!
+    <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close" style="float: right;"></button>
+  </div>
+  {% endif %}
+  <div class="container" id="log" style="margin-top: 8%;">
+    <div class="row">
+      <div class="col text-center">
+        <form action="" method="POST">
+          {{ form.hidden_tag() }}
+          <dl>
             {% for field in form.display %}
-            <dt><h5 >{{ form[field].label }}</h5></dt>
+            <dt>
+              <h5>{{ form[field].label }}</h5>
+            </dt>
             <dd>{{ form[field]() }}</dd>
-              {% if form[field].errors %}
-                  {% for e in form[field].errors %}
-                  <p class="help-block">{{ e }}</p>
-                  {% endfor %}
-              {% endif %}
+            {% if form[field].errors %}
+            {% for e in form[field].errors %}
+            <p class="help-block">{{ e }}</p>
             {% endfor %}
-            </dl>
-            <p>
-              <button type="submit" class="btn" style="background-color: #E5BE6B;">Register</button>
-          </form>
-        </div>
+            {% endif %}
+            {% endfor %}
+          </dl>
+          <p>
+            <button type="submit" class="btn" style="background-color: #E5BE6B;">Register</button>
+        </form>
       </div>
     </div>
+  </div>
   <!-- </div> -->
-  
- </body>
+
+</body>
+
 </html>
-
-  
-
-

@@ -4,7 +4,7 @@ from monolith.database import User, Blacklist, Reports, db
 from monolith.forms import UserForm
 from flask_login import current_user
 
-NUM_REPORTS = 3
+NUM_REPORTS = 2
 
 users = Blueprint('users', __name__)
 
@@ -28,11 +28,17 @@ def create_user():
             s is a secret key.
             """
             result = db.session.query(User).filter(User.email == new_user.email).all()
-            if not result:
+            reported_user = db.session.query(User).filter(User.email == new_user.email).filter(
+                User.firstname == new_user.firstname).filter(
+                    User.lastname == new_user.lastname).filter(User.date_of_birth == new_user.date_of_birth).first()
+            if not result and not reported_user:
                 new_user.set_password(form.password.data)
                 db.session.add(new_user)
                 db.session.commit()
                 return redirect('/')
+            elif reported_user.is_reported:
+                is_reported = True
+                return render_template('create_user.html', form=form, is_reported=is_reported)
             return render_template("create_user.html", emailError=True, form=form)
     elif request.method == 'GET':
         return render_template('create_user.html', form=form)
@@ -117,17 +123,18 @@ def report_user():
         db.session.commit()
 
         num_reports = db.session.query(Reports).filter(Reports.id_reported == report.id_reported).all()
+        print(len(num_reports))
         if len(num_reports) == NUM_REPORTS:
-            blacklist = Blacklist()
-            blacklist.id_user = current_user.id
-            blacklist.id_blacklisted = report.id_reported
-            db.session.add(blacklist)
+            print('dentro if')
+            user = db.session.query(Reports, User).filter(report.id_reported == User.id).first()
+            print(user)
+            user.User.is_reported = True
             db.session.commit()
-            return redirect('/blacklist')
-        else:
-            return redirect('/report')
+
+        return redirect('/report')
     else:
         report = db.session.query(User.id).join(Reports, Reports.id_reported == User.id).filter(
             Reports.id_user == current_user.id)
-        users = db.session.query(User).filter(User.email != current_user.email).filter(User.id.not_in(report))
+        users = db.session.query(User).filter(User.email != current_user.email).filter(User.id.not_in(report)).filter(
+            User.is_reported == False)
         return render_template('report_user.html', users=users)
