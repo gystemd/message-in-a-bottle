@@ -102,7 +102,9 @@ class TestApp(TestBase):
 
         self.login(self.sender, "1234")
 
-        self.app.get('/message/recipients')
+        reply = self.app.get('/message/recipients')
+        self.assertEqual(reply.status, '200 OK')
+        self.assertIn(b'Search recipient', reply.data)
 
         self.logout()
 
@@ -118,8 +120,38 @@ class TestApp(TestBase):
                 text='test message image',
                 file=image)
 
-            reply = self.app.post("/message/send", content_type='multipart/form-data',data=message, follow_redirects=True)
+            reply = self.app.post("/message/send", content_type='multipart/form-data',
+                                  data=message, follow_redirects=True)
             reply = self.app.get('/mailbox/sent')
             self.assertIn(b"test message image", reply.data)
         self.logout()
 
+    def test_forward(self):
+        self.login(self.sender, '1234')
+
+        message = dict(
+            receiver=self.receiver,
+            date='2020-10-26t01:01',
+            text='message forward',
+        )
+
+        reply = self.app.post("/message/send", data=message, follow_redirects=True)
+
+        self.logout()
+
+        self.login(self.receiver, '1234')
+
+        reply = self.app.get('/mailbox/received')
+        self.assertIn(b'message forward', reply.data)
+
+        reply = self.app.get('message/recipients/5')
+        self.assertIn(b'Search recipient', reply.data)
+
+        message = dict(
+            recipient=self.receiver
+        )
+
+        reply = self.app.post('message/send/forward/5', data=message)
+        self.assertIn(b'message forward', reply.data)
+
+        self.logout()

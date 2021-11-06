@@ -1,44 +1,49 @@
 <html>
-    <head>
-    <title>Recipients</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    
-    <style>
-        body{
-            background-image: url(https://i.postimg.cc/YSgCg909/mare2.jpg);
-            background-size: cover;
-            }
-            #myInput {
-            width: 50%;
-            font-size: 16px;
-            padding: 12px 20px 12px 40px;
-            border: 1px solid #ddd; 
-            margin-bottom: 12px;
-          }
 
-          #myUL {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-          }
-          #myUL button:hover{
-            background-color: #eee; /* Add a hover effect to all links, except for headers */
-          }
-    </style>
-    </head>
-    <body>
+<head>
+  <title>Recipients</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-   {% include "menu.html" %}
-    <div class="container data" style="margin-left: 32%; margin-top: 10%;">
-      <input type="text" id="myInput" onkeyup="search()" placeholder="Search recipient">
-      {% if "id_message" in form %}
-      <form action='/message/send/forward/{{form["id_message"]}}' method='POST'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <style>
+    body {
+      background-image: url(https://i.postimg.cc/YSgCg909/mare2.jpg);
+      background-size: cover;
+    }
+
+    #myInput {
+      width: 50%;
+      font-size: 16px;
+      padding: 12px 20px 12px 40px;
+      border: 1px solid #ddd;
+      margin-bottom: 12px;
+    }
+
+    #myUL {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    #myUL button:hover {
+      background-color: #eee;
+      /* Add a hover effect to all links, except for headers */
+    }
+  </style>
+</head>
+
+<body>
+
+  {% include "menu.html" %}
+  <div class="container data" style="margin-left: 32%; margin-top: 10%;">
+    <input type="text" id="myInput" onkeyup="search()" placeholder="Search recipient">
+    {% if "id_message" in form %}
+    <form action='/message/send/forward/{{form["id_message"]}}' method='POST'>
       {% else %}
       <form method="get" action="/message/send" class="inline">
         {% endif %}
@@ -46,32 +51,34 @@
           {% for rec in form['recipients'] : %}
           <li>
             <button type="submit" name="recipient" value={{rec.email}} class="list-group-item link-button w-50 rounded">
-                {{rec.email}}
-            </button></li>
-          {% endfor %}            
+              {{rec.email}}
+            </button>
+          </li>
+          {% endfor %}
         </ul>
       </form>
-    </div>
-  </body>
-  <script>
-    function search() {
-      // Declare variables
-      var input, filter, ul, li, button, i, txtValue;
-      input = document.getElementById('myInput');
-      filter = input.value.toUpperCase();
-      ul = document.getElementById("myUL");
-      li = ul.getElementsByTagName('li');
-    
-      // Loop through all list items, and hide those who don't match the search query
-      for (i = 0; i < li.length; i++) {
-        button = li[i].getElementsByTagName("button")[0];
-        txtValue = button.textContent || button.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-          li[i].style.display = "";
-        } else {
-          li[i].style.display = "none";
-        }
+  </div>
+</body>
+<script>
+  function search() {
+    // Declare variables
+    var input, filter, ul, li, button, i, txtValue;
+    input = document.getElementById('myInput');
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("myUL");
+    li = ul.getElementsByTagName('li');
+
+    // Loop through all list items, and hide those who don't match the search query
+    for (i = 0; i < li.length; i++) {
+      button = li[i].getElementsByTagName("button")[0];
+      txtValue = button.textContent || button.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        li[i].style.display = "";
+      } else {
+        li[i].style.display = "none";
       }
     }
-    </script>
+  }
+</script>
+
 </html>

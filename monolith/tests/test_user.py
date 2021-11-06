@@ -28,14 +28,14 @@ class TestApp(TestBase):
         self.assertIn(b'email', reply.data)
 
         reply = self.app.post("/create_user",
-                             data=dict(
-                                 email='prova@gmail.com',
-                                 firstname='Prova',
-                                 lastname='Prova',
-                                 password='1234',
-                                 dateofbirth='01/01/2001'
-                             ),
-                             follow_redirects=True)
+                              data=dict(
+                                  email='prova@gmail.com',
+                                  firstname='Prova',
+                                  lastname='Prova',
+                                  password='1234',
+                                  dateofbirth='01/01/2001'
+                              ),
+                              follow_redirects=True)
         self.assertIn(b'Email already in use', reply.data)
 
         self.logout()
@@ -45,6 +45,9 @@ class TestApp(TestBase):
         reply = self.app.get('/userinfo/content_filter')
         self.assertIn(b'list', reply.data)
 
+        reply = self.app.get('/userinfo/content_filter/10')
+        self.assertEqual(reply.status, '404 NOT FOUND')
+
         reply = self.app.put('/userinfo/content_filter/1', data=dict(active=True))
         self.assertEqual(reply.status, '200 OK')
 
@@ -52,6 +55,3 @@ class TestApp(TestBase):
         self.assertIn(b'id', reply.data)
 
         self.logout()
-
-
-

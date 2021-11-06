@@ -1,4 +1,2 @@
 [run]
-omit = *background.py*
-    *tests*
-    *app.py*
+omit = *tests*
